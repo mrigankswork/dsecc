@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kinvi Open Batch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, factual, a food-safety desk, not a marketing page
+   IDEA: the back of a Kinvi wrapper, where the batch code is stamped, opened into its test record
+   PICTURE: a large wrapper panel with the stamped code, and the batch's status record beside it
+   COLOUR and TYPE: white ground, cocoa ink, Kinvi maroon accent; status red, amber, green. Archivo + Inter
+   LAYOUT: two tabs. Check your bar (public) and Recall cost lab (Kinvi crisis team) */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#141012);--panel:light-dark(#f6f2f0,#1f191b);--ink:light-dark(#22140f,#f3ece8);--mute:light-dark(#6d5d57,#b7a8a2);--line:light-dark(#e4dad6,#3a3033);--acc:light-dark(#8e1b2c,#e0637a);--accbg:light-dark(#8e1b2c,#7a1626);--red:light-dark(#b3261e,#ff8a80);--redbg:light-dark(#fde8e6,#3b1715);--amb:light-dark(#8a5a00,#ffc65c);--ambbg:light-dark(#fff3d6,#3a2c10);--grn:light-dark(#1d6b3a,#7bd89b);--grnbg:light-dark(#e3f4e8,#14301f)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Archivo,Inter,sans-serif;line-height:1.08;margin:0;text-wrap:balance}
+h1{font-size:clamp(32px,4.6vw,48px);font-weight:800}
+h2{font-size:24px;font-weight:700}
+h3{font-size:17px;font-weight:700}
+.band{padding:clamp(24px,4vw,48px) max(5vw,16px)}
+.wrap{max-width:1180px;margin:0 auto}
+header.band{background:var(--accbg);color:#fff;padding-bottom:0}
+header p{max-width:62ch;margin:10px 0 0;color:#f4dfe2}
+.note{font-size:13px;color:var(--mute)}
+header .note{color:#e8c4ca;margin-top:6px}
+.tabs{display:flex;gap:4px;margin-top:24px;flex-wrap:wrap}
+.tabs button{font:600 15px Inter,sans-serif;border:0;padding:12px 18px;min-height:44px;border-radius:10px 10px 0 0;background:#ffffff22;color:#fff;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--bg);color:var(--ink)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.view[hidden]{display:none}
+.hours{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.chip{font:600 14px Inter,sans-serif;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:9px 14px;min-height:44px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:start}
+.wrapper{background:linear-gradient(160deg,#5a2a1c,#2f150d);color:#f7e9df;border-radius:18px;padding:26px;position:relative;box-shadow:0 18px 40px -18px #0008;overflow:hidden}
+.wrapper::after{content:"";position:absolute;inset:0 0 auto 0;height:14px;background:repeating-linear-gradient(90deg,#ffffff22 0 8px,transparent 8px 16px)}
+.brand{font:800 28px Archivo,sans-serif;letter-spacing:.02em}
+.flav{color:#e9c9b5;margin-bottom:18px}
+.stamp{background:#fbf6f1;color:#22140f;border-radius:10px;padding:14px;margin-top:8px}
+.stamp label{font-size:13px;color:#6d5d57;display:block;margin-bottom:6px}
+.stamp .row{display:flex;gap:8px}
+.stamp input{flex:1;font:700 22px "Courier New",monospace;letter-spacing:.08em;padding:8px 10px;border:2px dashed #8e1b2c;border-radius:8px;background:#fff;color:#22140f;min-height:48px;text-transform:uppercase}
+.btn{font:600 15px Inter,sans-serif;border:0;border-radius:8px;padding:10px 16px;min-height:44px;background:var(--acc);color:#fff;cursor:pointer}
+.stamp .btn{background:#8e1b2c}
+.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.quick button{font:600 13px "Courier New",monospace;border:1px solid #d9c9bf;background:#fff;color:#22140f;border-radius:6px;padding:6px 10px;min-height:36px;cursor:pointer}
+.facts{font-size:13px;color:#e9c9b5;margin-top:16px}
+.card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--bg)}
+.status{display:inline-block;font:800 15px Archivo,sans-serif;padding:6px 12px;border-radius:8px}
+.s-red{background:var(--redbg);color:var(--red)}.s-amb{background:var(--ambbg);color:var(--amb)}.s-grn{background:var(--grnbg);color:var(--grn)}.s-gry{background:var(--panel);color:var(--mute)}
+dl{display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr);gap:8px 16px;margin:18px 0 0}
+dt{color:var(--mute);font-size:14px}dd{margin:0;font-weight:500}
+.do{background:var(--panel);border-radius:12px;padding:14px 16px;margin-top:18px}
+.refund{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:14px;align-items:end}
+.refund label{font-size:13px;color:var(--mute);display:block}
+.refund input,.refund select{width:100%;font:16px Inter,sans-serif;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);min-height:44px}
+.big{font:800 clamp(28px,4vw,40px) Archivo,sans-serif;white-space:nowrap}
+table{width:100%;border-collapse:collapse;font-size:15px;margin-top:10px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--mute);font-weight:600}
+td.n,th.n{text-align:right;white-space:nowrap}
+.code{font:700 15px "Courier New",monospace}
+.section{margin-top:34px}
+/* cost lab */
+.lab{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:28px;align-items:start}
+.ctrl{display:grid;gap:14px}
+.ctrl label{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:600}
+.ctrl label span{color:var(--acc);white-space:nowrap}
+.ctrl input[type=range]{width:100%;accent-color:var(--acc);min-height:28px}
+.ctrl .tog{display:flex;align-items:center;gap:10px;font-weight:500;justify-content:flex-start}
+.ctrl .tog input{width:20px;height:20px;accent-color:var(--acc)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.meter{height:34px;border-radius:8px;background:var(--panel);display:flex;overflow:hidden;position:relative;margin:14px 0 6px}
+.meter div{height:100%}
+.cap{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mute)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.verdict{border-radius:12px;padding:14px 16px;margin-top:14px;font-weight:500}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:16px}
+.kpi{background:var(--panel);border-radius:12px;padding:12px 14px}
+.kpi b{display:block;font:800 22px Archivo,sans-serif;white-space:nowrap}
+.kpi small{color:var(--mute);font-size:13px}
+@media(max-width:820px){.grid,.lab{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){dl{grid-template-columns:minmax(0,1fr)}dt{margin-top:6px}table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;white-space:normal;color:var(--mute)}.stack td:empty{display:none}}
+@media(prefers-reduced-motion:no-preference){.card{transition:opacity .2s}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<header class="band"><div class="wrap">
+  <h1>Kinvi Open Batch</h1>
+  <p>Type the code stamped on your wrapper. See everything we know about that batch, and claim a refund if it has been recalled.</p>
+  <p class="note">A working prototype for Market Maven 2026, Round 2. Kinvi is fictional; every figure comes from the case or Inject A. No result is invented: tests still running show as pending.</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="t-check" aria-selected="true" data-v="check">Check your bar</button>
+    <button role="tab" id="t-lab" aria-selected="false" data-v="lab">Recall cost lab (crisis team)</button>
+  </div>
+</div></header>
+
+<main>
+<section class="band view" id="v-check"><div class="wrap">
+  <div class="hours" id="hours" aria-label="Show status as of"></div>
+  <div class="grid">
+    <div class="wrapper">
+      <div class="brand">KINVI</div>
+      <div class="flav">Cocoa Crunch · millet &amp; nut protein bar · ₹65</div>
+      <div class="stamp">
+        <label for="code">Batch code (printed near the best-before date)</label>
+        <div class="row"><input id="code" value="CC-214" maxlength="10" autocomplete="off"><button class="btn" id="go">Check</button></div>
+        <div class="quick" id="quick"></div>
+      </div>
+      <p class="facts">Sweetened with dates and jaggery. 9.2 g total sugars per bar. Every batch from Day 8 is released only after an independent lab passes it.</p>
+    </div>
+    <div class="card" id="result" aria-live="polite"></div>
+  </div>
+
+  <div class="section">
+    <h2>Every Cocoa Crunch batch, in one place</h2>
+    <p class="note">Complaints are those received in the 90 days before the reel. 3 more named no batch code.</p>
+    <div class="scroll"><table class="stack" id="board"></table></div>
+  </div>
+</div></section>
+
+<section class="band view" id="v-lab" hidden><div class="wrap">
+  <h2>What does each recall choice cost the ₹25 lakh fund?</h2>
+  <p class="note" style="margin:8px 0 16px">Unit costs are the case's: write-off ₹28 per unsold bar, ₹15 per bar collected from Dashly stores (free from our warehouse), ₹65 refund at a 15–40% claim rate, ₹60,000 per full lab test, ₹1.2 lakh per week of extra support, ₹1.5 lakh legal, ₹3 lakh agency, ₹1 lakh of paid social for 12 lakh impressions.</p>
+  <div class="presets" id="presets"></div>
+  <div class="lab">
+    <div class="ctrl" id="ctrl"></div>
+    <div class="card">
+      <div class="note">Committed from the fund (30 days)</div>
+      <div class="big" id="total"></div>
+      <div class="meter" id="meter"></div>
+      <div class="note" style="position:relative;height:20px"><span style="position:absolute;left:0">₹0</span><span style="position:absolute;left:83.33%;transform:translateX(-50%);white-space:nowrap">Fund ₹25 L</span><span style="position:absolute;right:0">₹30 L</span></div>
+      <div class="legend" id="legend"></div>
+      <div class="verdict" id="verdict"></div>
+      <div class="kpis" id="kpis"></div>
+      <table id="lines"></table>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<script>
+{
+const $=s=>document.querySelector(s);
+const L=v=>'₹'+(v/1e5).toFixed(2)+' L';
+const HOURS=[{h:12,t:'Hour 12 · Fri 8 am',d:'First statement'},{h:38,t:'Hour 38 · Sat 10 am',d:'After our own tests'},{h:108,t:'Hour 108 · Mon 8 pm',d:'Full lab results due'}];
+let hour=38;
+const B={
+ 'CC-214':{size:'40,000 bars (24,000 sold)',release:'7.2% vs 7.0% limit. Noted "slightly high, released"',comp:3,
+   own:h=>h>=38?'7.9% average moisture; visible mould on 2 of 6 retained bars':'Retained bars under test',
+   lab:h=>h>=108?'Results due today. Posted here unedited when the lab sends them':'Ordered at Hour 8 (₹60,000). Due Hour 108',
+   st:h=>['RECALLED','s-red'], since:h=>'Recalled at Hour 12',
+   act:'Do not eat it. Claim ₹65 for every bar below; you do not need to return it.'},
+ 'CC-213':{size:'Not stated in case (we assume 40,000 bars, 80% sold)',release:'6.9%, within the 7.0% limit',comp:3,
+   own:h=>h>=38?'7.1% average moisture (above the 7.0% limit); no mould seen':'Retained bars under test',
+   lab:h=>h>=108?'Results due today. Posted here unedited when the lab sends them':'Ordered at Hour 8 (₹60,000). Due Hour 108',
+   st:h=>h>=38?['RECALLED','s-red']:['ON HOLD','s-amb'], since:h=>h>=38?'Recalled at Hour 38 (on hold since Hour 6)':'Stopped from sale at Hour 6',
+   act:h=>h>=38?'Do not eat it. Claim ₹65 for every bar below.':'We have stopped selling this batch while it is tested. If you have one, keep it aside; we will update this page.'},
+ 'CC-212':{size:'Not stated in case',release:'6.4%, within the 7.0% limit',comp:0,
+   own:h=>h>=38?'Retained-bar check running; result due Hour 48':'Not yet tested',
+   lab:h=>'Not ordered: no complaints name this batch',
+   st:h=>['ON SALE','s-grn'], since:h=>'No action needed so far',
+   act:'Safe to eat on what we know today. If anything changes, this page changes first.'},
+ 'CC-209':{size:'Older batch, no longer sold',release:'Not stated in case',comp:0,
+   own:h=>'None',lab:h=>h>=38?"Nisha Rao's lab: 9.8 g total sugars (label: 9.2 g). It could not measure added sugar":'Tested privately by the creator',
+   st:h=>['SOLD OUT','s-gry'], since:h=>'Not on shelves',
+   act:'This is the batch in the creator\'s sugar test. Her number is close to our label. The claim "no added sugar" was the problem, and we have removed it.'}
+};
+const val=(x,h)=>typeof x==='function'?x(h):x;
+function hoursUI(){$('#hours').innerHTML='<span class="note">Show status as of</span>'+HOURS.map(o=>`<button class="chip" aria-pressed="${o.h===hour}" data-h="${o.h}">${o.t}</button>`).join('')}
+function check(){
+ const c=$('#code').value.trim().toUpperCase().replace(/\s/g,'');$('#code').value=c;
+ const b=B[c];
+ if(!b){$('#result').innerHTML=`<span class="status s-gry">NOT FOUND</span><h2 style="margin-top:12px">We have no batch "${c.replace(/[<>&"']/g,'')}" on record</h2><p>Check the code near the best-before date. If it is missing or smudged, write to support with a photo of the wrapper: Quality reads every one of those within 24 hours.</p>`;return}
+ const [s,cls]=b.st(hour);const recalled=s==='RECALLED';
+ $('#result').innerHTML=`<span class="status ${cls}">${s}</span> <span class="note">${b.since(hour)}</span>
+ <h2 style="margin-top:12px">Batch <span class="code">${c}</span></h2>
+ <dl><dt>Batch size</dt><dd>${b.size}</dd><dt>Moisture at release</dt><dd>${b.release}</dd><dt>Our own check</dt><dd>${val(b.own,hour)}</dd><dt>Independent lab</dt><dd>${val(b.lab,hour)}</dd><dt>Complaints before the reel</dt><dd>${b.comp} (none reached Quality at the time)</dd></dl>
+ <div class="do"><b>What to do:</b> ${val(b.act,hour)}</div>
+ ${recalled?`<form class="refund" id="rf"><div><label for="n">Bars you have or ate</label><input id="n" type="number" min="1" max="50" value="2"></div><div><label for="src">Bought on</label><select id="src"><option>Dashly</option><option>kinvi.in</option><option>Another shop</option></select></div><div><div class="note">Refund</div><div class="big" id="amt">₹130</div></div><button class="btn" type="submit">Claim refund</button></form><p class="note" id="msg">Refunds go back to the original payment method within 48 hours. Dashly orders are matched from order history, so no receipt is needed.</p>`:''}`;
+ if(recalled){const n=$('#n'),up=()=>$('#amt').textContent='₹'+Math.max(0,Math.min(50,+n.value||0))*65;n.oninput=up;
+  $('#rf').onsubmit=e=>{e.preventDefault();$('#msg').innerHTML=`<b>Prototype:</b> nothing was sent. In the live tool you would get reference KNV-${c.slice(3)}-${String(Math.floor(Math.random()*9000)+1000)} and a refund of ${$('#amt').textContent}.`}}
+}
+function board(){
+ $('#board').innerHTML='<thead><tr><th>Batch</th><th>Status</th><th>Moisture at release</th><th>Our own check</th><th class="n">Complaints</th></tr></thead><tbody>'+
+ Object.entries(B).map(([k,b])=>{const [s,c]=b.st(hour);return `<tr><td class="code">${k}</td><td><span class="status ${c}">${s}</span></td><td>${b.release}</td><td>${val(b.own,hour)}</td><td class="n">${b.comp}</td></tr>`}).join('')+'</tbody>';
+}
+function renderCheck(){hoursUI();check();board()}
+$('#quick').innerHTML=Object.keys(B).map(k=>`<button data-c="${k}">${k}</button>`).join('');
+$('#quick').onclick=e=>{const c=e.target.dataset.c;if(c){$('#code').value=c;check()}};
+$('#go').onclick=check;$('#code').onkeydown=e=>{if(e.key==='Enter')check()};
+$('#hours').onclick=e=>{const h=e.target.dataset.h;if(h){hour=+h;renderCheck()}};
+
+/* ---------- cost lab ---------- */
+const S={claim:25,dashly:58,r214:true,r213:false,s213:40000,sell213:80,labs:2,support:2,social:1,newb:2,legal:true,agency:false,keep:false};
+const PRE={'Our plan · Hour 6':{claim:25,dashly:58,r214:true,r213:false,s213:40000,sell213:80,labs:2,support:2,social:1,newb:2,legal:true,agency:false,keep:false},
+ 'Our plan · after Inject A':{claim:25,dashly:58,r214:true,r213:true,s213:40000,sell213:80,labs:2,support:2,social:1,newb:1,legal:true,agency:false,keep:false},
+ 'Worst case · 40% claim':{claim:40,dashly:100,r214:true,r213:true,s213:40000,sell213:80,labs:2,support:2,social:1,newb:1,legal:true,agency:false,keep:false},
+ "Dev's plan · keep selling":{claim:25,dashly:58,r214:false,r213:false,s213:40000,sell213:80,labs:1,support:4,social:2,newb:2,legal:true,agency:true,keep:true}};
+const CTL=[
+ ['claim','Refund claim rate','%',15,40,1],['dashly','Unsold stock sitting in Dashly stores','%',0,100,1],
+ ['r214','Recall CC-214 (24,000 sold, 16,000 in stock)'],['r213','Recall CC-213'],
+ ['s213','CC-213 batch size (assumed)',' bars',20000,60000,1000],['sell213','CC-213 share already sold (assumed)','%',40,100,5],
+ ['labs','Full lab tests on suspect batches','',0,3,1],['newb','Independent tests on new batches','',0,3,1],
+ ['support','Weeks of extra support team','',0,4,1],['social','Paid social waves (₹1 L = 12 L impressions)','',0,3,1],
+ ['legal','Outside legal counsel'],['agency','Crisis-comms agency']];
+function ctrlUI(){$('#ctrl').innerHTML=CTL.map(([k,t,u,mn,mx,st])=>mn===undefined?
+ `<label class="tog"><input type="checkbox" id="c-${k}" ${S[k]?'checked':''}>${t}</label>`:
+ `<div><label for="c-${k}">${t}<span id="o-${k}">${S[k].toLocaleString('en-IN')}${u}</span></label><input type="range" id="c-${k}" min="${mn}" max="${mx}" step="${st}" value="${S[k]}"></div>`).join('')}
+$('#ctrl').oninput=e=>{const k=e.target.id.slice(2);if(!(k in S))return;S[k]=e.target.type==='checkbox'?e.target.checked:+e.target.value;S.keep=false;calc()};
+$('#presets').innerHTML=Object.keys(PRE).map(k=>`<button class="chip" data-p="${k}">${k}</button>`).join('');
+$('#presets').onclick=e=>{const p=e.target.dataset.p;if(!p)return;Object.assign(S,PRE[p]);ctrlUI();calc(p)};
+const COL={Refunds:'#8e1b2c','Write-off':'#c05a3c',Collection:'#e0a458','Lab tests':'#3d6b8f',Support:'#6b8f71','Paid social':'#9a7fb5',Legal:'#7a6e68',Agency:'#b8aaa3'};
+function recall(sold,stock){return{ref:sold*S.claim/100*65,wo:stock*28,col:stock*S.dashly/100*15,bars:sold*S.claim/100}}
+function calc(p){
+ for(const [k,,u] of CTL){const o=$('#o-'+k);if(o)o.textContent=S[k].toLocaleString('en-IN')+u}
+ const a=S.r214?recall(24000,16000):{ref:0,wo:0,col:0,bars:0};
+ const s213=Math.round(S.s213*S.sell213/100);
+ const b=S.r213?recall(s213,S.s213-s213):{ref:0,wo:0,col:0,bars:0};
+ const items={Refunds:a.ref+b.ref,'Write-off':a.wo+b.wo,Collection:a.col+b.col,'Lab tests':(S.labs+S.newb)*60000,Support:S.support*120000,'Paid social':S.social*100000,Legal:S.legal?150000:0,Agency:S.agency?300000:0};
+ const tot=Object.values(items).reduce((x,y)=>x+y,0);
+ $('#total').textContent=L(tot);
+ $('#meter').innerHTML=Object.entries(items).filter(([,v])=>v>0).map(([k,v])=>`<div title="${k}: ${L(v)}" style="width:${Math.min(100,v/3e6*100)}%;background:${COL[k]}"></div>`).join('')+'<span class="cap" style="left:83.33%"></span>';
+ $('#legend').innerHTML=Object.entries(items).filter(([,v])=>v>0).map(([k])=>`<span><i style="background:${COL[k]}"></i>${k}</span>`).join('');
+ const head=25e5-tot,v=$('#verdict');
+ if(S.keep){v.className='verdict s-red';v.innerHTML='<b>Cheapest on paper, most expensive in fact.</b> 16,000 CC-214 bars stay on sale, and Dashly has said it delists without a written plan: that puts 58% of sales at risk, about ₹34.8 L a month or ₹1.16 L a day.'}
+ else if(head>=0){v.className='verdict s-grn';v.innerHTML=`<b>Inside the fund.</b> ${L(head)} left for anything new.`}
+ else{v.className='verdict s-amb';v.innerHTML=`<b>Over the fund by ${L(-head)}.</b> Ask the board now: approval takes 5 days, and refunds paid in the first week are covered by the fund while it is pending.`}
+ const sold=(S.r214?24000:0)+(S.r213?s213:0);
+ $('#kpis').innerHTML=`<div class="kpi"><b>${Math.round(a.bars+b.bars).toLocaleString('en-IN')}</b><small>bars refunded at ${S.claim}%</small></div><div class="kpi"><b>${((S.r214?16000:0)+(S.r213?S.s213-s213:0)).toLocaleString('en-IN')}</b><small>unsold bars pulled</small></div><div class="kpi"><b>${(sold).toLocaleString('en-IN')}</b><small>buyers' bars covered</small></div>`;
+ $('#lines').innerHTML='<tbody>'+Object.entries(items).map(([k,x])=>`<tr><td><i style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${COL[k]};margin-right:8px"></i>${k}</td><td class="n">${L(x)}</td></tr>`).join('')+`<tr><td><b>Total</b></td><td class="n"><b>${L(tot)}</b></td></tr></tbody>`;
+ document.querySelectorAll('#presets .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.p===p));
+}
+ctrlUI();calc('Our plan · Hour 6');renderCheck();
+
+const tabs=document.querySelectorAll('[role=tab]');
+function show(v){tabs.forEach(t=>t.setAttribute('aria-selected',t.dataset.v===v));$('#v-check').hidden=v!=='check';$('#v-lab').hidden=v!=='lab'}
+tabs.forEach(t=>t.onclick=()=>{show(t.dataset.v);try{history.replaceState(null,'','#'+t.dataset.v)}catch(e){}});
+if(location.hash==='#lab')show('lab');
+}
+</script>
+</body>
+</html>
